@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FinTracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="width: 80%;">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script>
+        // Retrieve data from your Go backend
+        fetch('/api/data')
+            .then(response => response.json())
+            .then(data => {
+                const dates = data.map(item => item.date);
+                const amounts = data.map(item => item.amount);
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        dates: dates,
+                        datasets: [{
+                            date: 'Data Points',
+                            data: amounts,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    </script>
+</body>
+</html>
